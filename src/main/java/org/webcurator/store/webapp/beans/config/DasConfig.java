@@ -20,6 +20,8 @@ import org.webcurator.core.archive.Archive;
 import org.webcurator.core.archive.dps.DPSArchive;
 import org.webcurator.core.archive.file.FileArchive;
 import org.webcurator.core.archive.oms.OMSArchive;
+import org.webcurator.core.networkmap.bdb.BDBNetworkMap;
+import org.webcurator.core.networkmap.service.NetworkMapLocalClient;
 import org.webcurator.core.reader.LogReaderImpl;
 import org.webcurator.core.store.*;
 import org.webcurator.core.store.arc.ArcDigitalAssetStoreService;
@@ -30,6 +32,8 @@ import org.webcurator.core.util.ApplicationContextFactory;
 import org.webcurator.core.util.WebServiceEndPoint;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -262,7 +266,7 @@ public class DasConfig {
     private String dpsArchiveHtmlSerialsRestrictAgencyType;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         ApplicationContextFactory.setApplicationContext(applicationContext);
     }
 
@@ -314,14 +318,14 @@ public class DasConfig {
             archive = new OMSArchive();
         } else if ("dpsArchive".equalsIgnoreCase(archiveType)) {
             archive = new DPSArchive();
-        } else  {
+        } else {
             LOGGER.debug("Instantiating Archive class for name=" + archiveType);
             if (archiveType.trim().length() > 0) {
                 try {
                     Class<?> clazz = Class.forName(archiveType);
                     Object archiveInstance = clazz.newInstance();
                     archive = (Archive) archiveInstance;
-                } catch (InstantiationException|IllegalAccessException|ClassNotFoundException e) {
+                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                     LOGGER.error("Unable to instantiate archive by type/class=" + archiveType, e);
                 }
             }
@@ -335,7 +339,7 @@ public class DasConfig {
         ListFactoryBean runnableIndexers = runnableIndexers();
 
         try {
-            List<RunnableIndex> list = (List<RunnableIndex>)(List<?>) runnableIndexers.getObject();
+            List<RunnableIndex> list = (List<RunnableIndex>) (List<?>) runnableIndexers.getObject();
             bean.setIndexers(list);
         } catch (Exception e) {
             // This is to avoid an 'throws Exception' in the method signature, which would percolate to all related
@@ -553,6 +557,26 @@ public class DasConfig {
         bean.setCustomDepositFormFieldMaps(customDepositFormFieldMaps);
 
         return bean;
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public BDBNetworkMap getBDBDatabase()  {
+        BDBNetworkMap db = new BDBNetworkMap();
+        String dbBaseDir = String.format("%s%s_resource", arcDigitalAssetStoreServiceBaseDir, File.separator);
+        try {
+            db.initializeDB(dbBaseDir, "resource.db");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return db;
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public NetworkMapLocalClient getNetworkMapLocalClient() {
+        NetworkMapLocalClient client = new NetworkMapLocalClient(getBDBDatabase());
+        return client;
     }
 
     public CustomDepositField depositFieldDctermsBibliographicCitation() {
