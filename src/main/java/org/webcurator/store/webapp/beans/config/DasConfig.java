@@ -21,6 +21,7 @@ import org.webcurator.core.archive.dps.DPSArchive;
 import org.webcurator.core.archive.file.FileArchive;
 import org.webcurator.core.archive.oms.OMSArchive;
 import org.webcurator.core.networkmap.bdb.BDBNetworkMap;
+import org.webcurator.core.networkmap.bdb.BDBNetworkMapPool;
 import org.webcurator.core.networkmap.service.NetworkMapLocalClient;
 import org.webcurator.core.reader.LogReaderImpl;
 import org.webcurator.core.store.*;
@@ -561,21 +562,15 @@ public class DasConfig {
 
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
-    public BDBNetworkMap getBDBDatabase()  {
-        BDBNetworkMap db = new BDBNetworkMap();
-        String dbBaseDir = String.format("%s%s_resource", arcDigitalAssetStoreServiceBaseDir, File.separator);
-        try {
-            db.initializeDB(dbBaseDir, "resource.db");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return db;
+    public BDBNetworkMapPool getBDBDatabasePool() {
+        BDBNetworkMapPool pool = new BDBNetworkMapPool(arcDigitalAssetStoreServiceBaseDir);
+        return pool;
     }
 
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     public NetworkMapLocalClient getNetworkMapLocalClient() {
-        NetworkMapLocalClient client = new NetworkMapLocalClient(getBDBDatabase());
+        NetworkMapLocalClient client = new NetworkMapLocalClient(getBDBDatabasePool());
         return client;
     }
 
