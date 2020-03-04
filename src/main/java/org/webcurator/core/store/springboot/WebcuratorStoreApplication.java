@@ -58,25 +58,19 @@ public class WebcuratorStoreApplication {
                 System.out.println(beanName);
             }
 
-            HarvestResultDTO result = new HarvestResultDTO();
-            result.setOid((long) 22);
-            result.setHarvestNumber(1);
-            result.setTargetInstanceOid((long) 36);
-            File directory = new File("/usr/local/wct/store/36/1");
-            WCTIndexer wctIndexer = new WCTIndexer(restTemplateBuilder);
-            wctIndexer.initialise(result, directory);
-            wctIndexer.setWsEndPoint(wsEndPoint);
-            wctIndexer.setMode(RunnableIndex.Mode.REMOVE);
-//            Thread processorRemove = new Thread(wctIndexer);
-//            processorRemove.start();
-//            processorRemove.join();
-//            System.out.println("Remove index finished");
-
-            wctIndexer.setMode(RunnableIndex.Mode.INDEX);
-            Thread processorIndex = new Thread(wctIndexer);
-            processorIndex.start();
-            processorIndex.join();
-            System.out.println("Indexing finished");
+//            HarvestResultDTO result = new HarvestResultDTO();
+//            result.setOid((long) 22);
+//            result.setHarvestNumber(1);
+//            result.setTargetInstanceOid((long) 36);
+//            File directory = new File("/usr/local/wct/store/36/1");
+//            WCTIndexer wctIndexer = new WCTIndexer(restTemplateBuilder);
+//            wctIndexer.initialise(result, directory);
+//            wctIndexer.setWsEndPoint(wsEndPoint);
+//            wctIndexer.setMode(RunnableIndex.Mode.INDEX);
+//            Thread processorIndex = new Thread(wctIndexer);
+//            processorIndex.start();
+//            processorIndex.join();
+//            System.out.println("Indexing finished");
         };
     }
 }
