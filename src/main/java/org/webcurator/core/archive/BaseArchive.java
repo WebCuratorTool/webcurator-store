@@ -56,6 +56,7 @@ public abstract class BaseArchive implements Archive {
 		return newFiles;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setArchiveLogReportFiles(String archiveLogReportFiles) {
 		this.archiveLogReportFiles = archiveLogReportFiles;
 		String[] files = archiveLogReportFiles.split(",");

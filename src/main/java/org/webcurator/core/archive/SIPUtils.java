@@ -91,7 +91,7 @@ public class SIPUtils {
 		return fsres+smres;
 	}
 
-
+	@SuppressWarnings("unchecked")
 	private static Map<Object,Object> createFileGroup(int instanceOID, int groupId, int fileId, String dirName, String fileSecID, List<ArchiveFile> files, String dir) {
 		Map res = new HashMap<Object,Object>();
 		String fsres = "";

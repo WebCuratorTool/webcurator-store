@@ -37,7 +37,7 @@ import java.util.*;
  * is part of the change to move to using annotations for Spring instead of
  * XML files.
  */
-@SuppressWarnings("all")
+@SuppressWarnings("unchecked")
 @Configuration
 @PropertySource(value = "classpath:wct-das.properties")
 public class DasConfig {

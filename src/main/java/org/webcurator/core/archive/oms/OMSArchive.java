@@ -25,10 +25,10 @@ import static org.webcurator.core.archive.Constants.PERSON_RESPONSIBLE;
 import static org.webcurator.core.archive.Constants.REFERENCE_NUMBER;
 import static org.webcurator.core.archive.Constants.RESTRICTION_DATE;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -85,7 +85,7 @@ public class OMSArchive extends BaseArchive {
 				}
 				// TODO finish SIP METS xml based on files
 				String finalSIP = getFinalSIP(SIP, targetInstanceOID, files);
-				InputStream sipIS = new StringBufferInputStream(finalSIP);
+				InputStream sipIS = new ByteArrayInputStream(finalSIP.getBytes("UTF-8"));
 				String metsFileName = "METS-"+targetInstanceOID+".xml";
 				uploader.uploadContent(sipIS,metsFileName,finalSIP.length());
 				IID = uploader.uploadPub();
