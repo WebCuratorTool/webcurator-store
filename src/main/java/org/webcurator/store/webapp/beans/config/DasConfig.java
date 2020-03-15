@@ -23,6 +23,7 @@ import org.webcurator.core.archive.oms.OMSArchive;
 import org.webcurator.core.networkmap.bdb.BDBNetworkMap;
 import org.webcurator.core.networkmap.bdb.BDBNetworkMapPool;
 import org.webcurator.core.networkmap.service.NetworkMapLocalClient;
+import org.webcurator.core.networkmap.service.NetworkMapService;
 import org.webcurator.core.reader.LogReaderImpl;
 import org.webcurator.core.store.*;
 import org.webcurator.core.store.arc.ArcDigitalAssetStoreService;
@@ -569,8 +570,8 @@ public class DasConfig {
 
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
-    public NetworkMapLocalClient getNetworkMapLocalClient() {
-        NetworkMapLocalClient client = new NetworkMapLocalClient(getBDBDatabasePool());
+    public NetworkMapService getNetworkMapLocalClient() {
+        NetworkMapService client = new NetworkMapLocalClient(getBDBDatabasePool());
         return client;
     }
 

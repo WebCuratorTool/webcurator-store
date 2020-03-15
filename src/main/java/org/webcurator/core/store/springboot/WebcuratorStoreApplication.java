@@ -12,13 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.webcurator.core.harvester.coordinator.HarvestAgentListenerService;
 import org.webcurator.core.harvester.coordinator.HarvestCoordinatorImpl;
-import org.webcurator.core.networkmap.service.NetworkMapRemoteController;
-import org.webcurator.core.store.RunnableIndex;
-import org.webcurator.core.store.WCTIndexer;
 import org.webcurator.core.util.WebServiceEndPoint;
-import org.webcurator.domain.model.core.HarvestResultDTO;
 
-import java.io.File;
 import java.util.Arrays;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
@@ -30,7 +25,7 @@ import java.util.Arrays;
         "org.webcurator.core.networkmap.service"},
 // HarvestAgentListenerService should be running on webcurator-webapp.
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-                classes = {HarvestAgentListenerService.class, HarvestCoordinatorImpl.class, NetworkMapRemoteController.class})
+                classes = {HarvestAgentListenerService.class, HarvestCoordinatorImpl.class})
 )
 public class WebcuratorStoreApplication {
     @Autowired
