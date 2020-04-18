@@ -37,11 +37,11 @@
 
     <!-- These levels will be overridden by logging.level... properties found in application.properties and
          application-<run-configuration>.properties -->
-    <root level="ERROR">
+    <root level="INFO">
         <appender-ref ref="GeneralLog" />
     </root>
 
-    <logger name="org.webcurator" level="INFO" additivity="false">
+    <logger name="org.webcurator" level="DEBUG" additivity="false">
     <appender-ref ref="GeneralLog" />
     </logger>
 

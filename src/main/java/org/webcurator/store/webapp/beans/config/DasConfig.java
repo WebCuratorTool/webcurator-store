@@ -16,11 +16,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.webcurator.core.archive.Archive;
 import org.webcurator.core.archive.dps.DPSArchive;
 import org.webcurator.core.archive.file.FileArchive;
 import org.webcurator.core.archive.oms.OMSArchive;
-import org.webcurator.core.networkmap.bdb.BDBNetworkMap;
+import org.webcurator.core.networkmap.NetworkMapDomainSuffix;
 import org.webcurator.core.networkmap.bdb.BDBNetworkMapPool;
 import org.webcurator.core.networkmap.service.NetworkMapLocalClient;
 import org.webcurator.core.networkmap.service.NetworkMapService;
@@ -34,8 +36,6 @@ import org.webcurator.core.util.ApplicationContextFactory;
 import org.webcurator.core.util.WebServiceEndPoint;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -573,6 +573,21 @@ public class DasConfig {
     public NetworkMapService getNetworkMapLocalClient() {
         NetworkMapService client = new NetworkMapLocalClient(getBDBDatabasePool());
         return client;
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public NetworkMapDomainSuffix getNetworkMapDomainSuffix() {
+        NetworkMapDomainSuffix suffixParser = new NetworkMapDomainSuffix();
+        Resource resource = new ClassPathResource("public_suffix_list.dat");
+
+        try {
+            suffixParser.init(resource.getFile().getAbsolutePath());
+        } catch (Exception e) {
+            LOGGER.error("Load domain suffix file failed.", e);
+        }
+
+        return suffixParser;
     }
 
     public CustomDepositField depositFieldDctermsBibliographicCitation() {
