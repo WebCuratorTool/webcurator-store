@@ -52,6 +52,12 @@ public class DasConfig {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+
+    @Value("${wctCoreWsEndpoint.schema}")
+    private String wctCoreWsEndpointSchema;
+
     @Value("${wctCoreWsEndpoint.host}")
     private String wctCoreWsEndpointHost;
 
@@ -275,6 +281,7 @@ public class DasConfig {
     @Bean
     public WebServiceEndPoint wctCoreWsEndpoint() {
         WebServiceEndPoint bean = new WebServiceEndPoint();
+        bean.setSchema(wctCoreWsEndpointSchema);
         bean.setHost(wctCoreWsEndpointHost);
         bean.setPort(wctCoreWsEndpointPort);
 
@@ -285,7 +292,7 @@ public class DasConfig {
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @Lazy(false) // lazy-init="default", but no default has been set for wct-das.xml
     public ArcDigitalAssetStoreService arcDigitalAssetStoreService() {
-        ArcDigitalAssetStoreService bean = new ArcDigitalAssetStoreService(new RestTemplateBuilder());
+        ArcDigitalAssetStoreService bean = new ArcDigitalAssetStoreService(restTemplateBuilder);
         bean.setBaseDir(arcDigitalAssetStoreServiceBaseDir);
         bean.setIndexer(indexer());
         bean.setWsEndPoint(wctCoreWsEndpoint());
@@ -370,7 +377,7 @@ public class DasConfig {
 
     @Bean
     public WCTIndexer wctIndexer() {
-        WCTIndexer bean = new WCTIndexer();
+        WCTIndexer bean = new WCTIndexer(wctCoreWsEndpointSchema, wctCoreWsEndpointHost, wctCoreWsEndpointPort, restTemplateBuilder);
         bean.setWsEndPoint(wctCoreWsEndpoint());
 
         return bean;
